@@ -26,10 +26,16 @@
       nixpkgs.lib.genAttrs supportedSystems (system:
         attrs (import nixpkgs {inherit system;}));
   in {
-    packages = perSystem (pkgs: {
-      caddy = pkgs.callPackage ./pkgs {};
-
-      default = self.packages.${pkgs.system}.caddy;
+    # nix build
+    packages = perSystem (system: pkgs: {
+      caddy = pkgs.buildGo120Module {
+        pname = "caddy";
+        inherit version;
+        src = ./caddy-src;
+        runVend = true;
+        vendorHash = "sha256-CvyQQNzdWn10AH9ekCVdbgQbYSv06ICl3Q9VYngT3Q4=";
+      };
+      default = self.packages.${system}.caddy;
     });
 
     nixosModules = {
