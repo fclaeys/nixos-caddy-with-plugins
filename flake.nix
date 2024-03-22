@@ -28,7 +28,7 @@
   in {
     # nix build
     packages = perSystem (system: pkgs: {
-      caddy = pkgs.buildGo120Module {
+      caddy = pkgs.buildGoModule {
         pname = "caddy";
         inherit version;
         src = ./caddy-src;
@@ -38,26 +38,14 @@
       default = self.packages.${system}.caddy;
     });
 
-    nixosModules = {
-      caddy = import ./modules self nixpkgs;
+    # Default module
+    nixosModules.default = import ./modules inputs;
 
-      default = self.nixosModules.caddy;
-    };
-
-    formatter = perSystem (pkgs: pkgs.alejandra);
-
-    devShells = perSystem (pkgs: {
-      update = pkgs.mkShell {
-        packages = with pkgs; [
-          alejandra
-          bash
-          common-updater-scripts
-          git
+    # nix develop
+    devShells = perSystem (_: pkgs: {
+      default = pkgs.mkShell {
+        nativeBuildInputs = with pkgs; [
           go
-          jq
-          nix-prefetch-git
-          nix-prefetch-github
-          nix-prefetch-scripts
         ];
       };
     });
