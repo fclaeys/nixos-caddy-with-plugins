@@ -1,4 +1,4 @@
-#!/usr/bin/env -S nix develop .#update -c bash
+#!/usr/bin/env -S nix shell -I nixpkgs=./. nixpkgs#bash nixpkgs#common-updater-scripts nixpkgs#git nixpkgs#go nixpkgs#jq nixpkgs#nix-prefetch-github -c bash
 
 COMMIT="$1"
 ROOT_DIR="$(pwd)"
