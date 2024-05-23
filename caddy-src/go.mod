@@ -1,6 +1,6 @@
 module caddy
 
-go 1.22.2
+go 1.22.3
 
 require (
 	github.com/caddy-dns/cloudflare v0.0.0-20240405130444-44030f9306f4
