@@ -5,11 +5,14 @@
   lib,
   ...
 }: let
+  inherit (lib) elemAt removePrefix splitString;
+
   info = import ./info.nix;
   dist = fetchFromGitHub info.dist;
 
-  caddy-version = info.version;
-  cloudflare-version = info.cfVersion;
+  caddy-version =  removePrefix "v" info.version;
+  cloudflare-version-string = splitString "-" (removePrefix "v" info.cfVersion);
+  cloudflare-version = elemAt cloudflare-version-string 0 + "+" + elemAt cloudflare-version-string 2;
 in
   buildGoModule {
     pname = "caddy-with-plugins";
